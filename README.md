@@ -1,5 +1,5 @@
 # Another-AD-Lab
-A shrimple guide on how to host Active Directory on a Windows 2019 Server using VirtualBox, and how to attack AD using Vulnerable-AD-Plus and Atomic Red Team!
+A shrimple guide on how to host Active Directory on a Windows 2019 Server using VirtualBox, and how to attack AD using Atomic Red Team
 
 > [!IMPORTANT]
 > You can use VMware to set up this entire lab. I would actually recommend it if you have access to the software since VirtualBox Shared Clipboard doesn't work even with Guest Additions installed, from my experience at least. 
@@ -10,7 +10,7 @@ Please check out the <strong>[Sources section](#sources)</strong> of this guide 
 # What You Will Learn!
 By the end of this guide, <strong>you are going to know a lot of stuff</strong>; you'll:
 - Know how to use VirtualBox to create VMs.
-- Know how to setup Active Directory on a Windows Server 2019 machine.
+- Know how to setup Active Directory on a Windows Server 2019 machine!
 - Establish simulated attacks in a controlled environment by using Atomic Red Team (ART).
 - Gain an understanding into how Active Directory can be attacked w/ tools like Mimikatz.
 - Gain an understanding as to how Atomic Red Team tests can be used for defensive purposes to enhance security postures.
@@ -35,23 +35,34 @@ Our next step is to go grab a [Server 2019 ISO from here](https://www.microsoft.
 - ~40GB of Storage
 
 > [!IMPORTANT]
-> The Evaluation Center ISO will last only ~180 days. If you don't plan on using this lab in the future, you have nothing to worry about. However, if you plan to continue using it, you should make a VM snapshot to prevent the VM from effectively expiring.
+> The Evaluation Center ISO has a time limit of 180 days on it. You're advised to take a snapshot of your VM when comfortable so that you can always revert back a few days to keep your VM fresh. Of course, if you don't plan on keeping this lab forever, then there is no need. 
 
 Start up the VM and get started with installation! Select the Standard Evaluation (Desktop Experience) option when prompted for what OS you wish to install; we will want a GUI for later when we get to some fun stuff. Select Custom Install and select our empty VM drive and start the actual OS installation. 
 
-Once the installation finishes, the VM will reboot, make sure to exit from the installation menu by clicking the red 'X'. When prompted, give a password for the Administrator user then let the installation continue.
+Once you're finished installation, log in and update your system! Once all the updates install though, we're gonna want to update and shutdown. Once the VM does shutdown, we need to remove our installation ISO from the VM's SATA ports (pretty easy, just go to the VM settings and you can hit 'Remove Attachment' on the ISO file that you used).
 
-When prompted, you'll need to press Crtl+Alt+Del to unlock the VM and authenticate as the Administrator user. You can do this by using the Input menu in VirtualBox by going to Input --> Keyboard --> Insert Crtl+Alt+Del.
-
-Now that you're on the desktop, there are a few things for you to do before moving on, which shouldn't require much explanation:
-
-- Update your system
-- Disable Windows Defender (assuming you're continuing with the guide in the same VM session, if not, then remember to disable it when you're continuing through the guide)
+Now once you start the VM again, you'll notice that you need to unlock the machine w/ Crtl+Alt+Del. You can of course enter these keys, or go to the Insert menu in VirtualBox and hit Insert Crtl+Alt+Del and get the same effect.
 
 # Installing Active Directory and Vulnerable-AD-Plus
-[Vulnerable-AD-Plus Repo](https://github.com/WaterExecution/vulnerable-AD-plus)
+Simple stuff from here, since it's just copy/paste commands from the [GitHub page](https://github.com/WaterExecution/vulnerable-AD-plus). Firstly, let's install ADDS:
 
-To be continued!
+```
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+Import-Module ADDSDeployment
+Install-ADDSForest -CreateDnsDelegation:$false -DatabasePath "C:\\Windows\\NTDS" -DomainMode "7" -DomainName "lab.local" -DomainNetbiosName "lab" -ForestMode "7" -InstallDns:$true -LogPath "C:\\Windows\\NTDS" -NoRebootOnCompletion:$false -SysvolPath "C:\\Windows\\SYSVOL" -Force:$true
+```
+
+Your VM will restart after AD is installed. Once your system is back up and running, we can continue and install Vulnerable-AD-Plus:
+
+```
+IEX((new-object net.webclient).downloadstring("https://raw.githubusercontent.com/WaterExecution/vulnerable-AD-plus/master/vulnadplus.ps1"));
+Invoke-VulnAD -UsersLimit 10 -DomainName "lab.local"
+```
+
+> [!NOTE]
+> You can actually modify the parameters inside the PS1 script that we're using an instead execute it on our local system by downloading it with curl/wget/IWR. This can allow for some funny usernames, passwords, etc. For this guide though, it isn't needed, but for you, it may be a welcome addition to your own lab.
+
+Unfortunately for me, I got an error which basically invalidated the options I gave to vulnerable-AD-plus and it just went ahead and made 100 users in the environment lol. Regardless, you'll be prompted to restart again. Once you reboot, you're officially ready to begin the mock incidents below.
 
 # Mock Incident 1: DCSync
 [Atomic Red Team Test](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1003.006/T1003.006.md#atomic-test-1---dcsync-active-directory)
@@ -65,9 +76,5 @@ To be continued!
 
 # Mock Incident 3: C2 Data Exfiltration 
 [Atomic Red Team Test](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1041/T1041.md#atomic-test-1---c2-data-exfiltration)
-
-To be continued!
-
 # Sources
 - [Windows Server 2019 ISOs](https://www.microsoft.com/en-us/evalcenter/download-windows-server-2022)
-- [Sources from my Elastic-ART Guide!](https://github.com/nubbsterr/Elastic-ART?tab=readme-ov-file#sources)
