@@ -11,10 +11,11 @@ Please check out the <strong>[Sources section](#sources)</strong> of this guide 
 By the end of this guide, <strong>you are going to know a lot of stuff</strong>; you'll:
 - Know how to use VirtualBox to create VMs.
 - Know how to setup Active Directory on a Windows Server 2019 machine!
+
+**If you choose to continue past the setup provided by this guide, you'll:**
 - Establish simulated attacks in a controlled environment by using Atomic Red Team (ART).
 - Gain an understanding into how Active Directory can be attacked w/ tools like Mimikatz.
 - Gain an understanding as to how Atomic Red Team tests can be used for defensive purposes to enhance security postures.
-- Understand [MITRE ATT&CK](https://attack.mitre.org/) and how it's a great tool for understanding different attacks. 
 
 # Getting Started
 > [!IMPORTANT]
@@ -64,17 +65,23 @@ Invoke-VulnAD -UsersLimit 10 -DomainName "lab.local"
 
 Unfortunately for me, I got an error which basically invalidated the options I gave to vulnerable-AD-plus and it just went ahead and made 100 users in the environment lol. Regardless, you'll be prompted to restart again. Once you reboot, you're officially ready to begin the mock incidents below.
 
-# Mock Incident 1: DCSync
-[Atomic Red Team Test](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1003.006/T1003.006.md#atomic-test-1---dcsync-active-directory)
+# What's Next?
+I would continue this guide, and show you guys how to do a bunch of the Atomic Red Team tests, but it requires a lot of extra work with getting executables and feeding options to all the tests. 
 
-To be continued!
+All tests I was planning to do are linked below for you to give a go! Feel free to read the docs for them and get everything setup yourself; primarily downloading Mimikatz and Rubeus for the DCSync and Kerberoast tests, which you can do through IWR in PowerShell, among other methods.
 
-# Mock Incident 2: Kerberoast w/ Rubeus
-[Atomic Red Team Test](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1558.003/T1558.003.md#atomic-test-2---rubeus-kerberoast)
+* [Atomic Red Team Test - DCSync](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1003.006/T1003.006.md#atomic-test-1---dcsync-active-directory)
 
-To be continued!
+* [Atomic Red Team Test - Kerberoast](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1558.003/T1558.003.md#atomic-test-2---rubeus-kerberoast)
+* [Atomic Red Team Test - C2 Exfiltration](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1041/T1041.md#atomic-test-1---c2-data-exfiltration)
 
-# Mock Incident 3: C2 Data Exfiltration 
-[Atomic Red Team Test](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1041/T1041.md#atomic-test-1---c2-data-exfiltration)
+# Installing Atomic Red Team
+```powershell
+IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);
+Install-AtomicRedTeam -getAtomics
+cd C:\AtomicRedTeam\invoke-atomicredteam
+Import-Module .\Invoke-AtomicRedTeam.psd1
+```
+
 # Sources
 - [Windows Server 2019 ISOs](https://www.microsoft.com/en-us/evalcenter/download-windows-server-2022)
