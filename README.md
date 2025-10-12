@@ -70,6 +70,8 @@ I would continue this guide, and show you guys how to do a bunch of the Atomic R
 
 All tests I was planning to do are linked below for you to give a go! Feel free to read the docs for them and get everything setup yourself; primarily downloading Mimikatz and Rubeus for the DCSync and Kerberoast tests, which you can do through the [-GetPrereqs](https://github.com/redcanaryco/invoke-atomicredteam/wiki/Check-or-Get-Prerequisites-for-Atomic-Tests#get-prerequisites) option when running your tests.
 
+After running the tests, you can try and find artifacts left behind by them through Event Viewer logs, particularly Security logs, and checking for related event IDs to each of the below attacks. Sysmon can also be used to get more refined log data to enhance your detection ability.
+
 * [Atomic Red Team Test - DCSync](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1003.006/T1003.006.md#atomic-test-1---dcsync-active-directory)
 
 * [Atomic Red Team Test - Kerberoast](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1558.003/T1558.003.md#atomic-test-2---rubeus-kerberoast)
