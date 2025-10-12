@@ -68,7 +68,7 @@ Unfortunately for me, I got an error which basically invalidated the options I g
 # What's Next?
 I would continue this guide, and show you guys how to do a bunch of the Atomic Red Team tests, but it requires a lot of extra work with getting executables and feeding options to all the tests. 
 
-All tests I was planning to do are linked below for you to give a go! Feel free to read the docs for them and get everything setup yourself; primarily downloading Mimikatz and Rubeus for the DCSync and Kerberoast tests, which you can do through IWR in PowerShell, among other methods.
+All tests I was planning to do are linked below for you to give a go! Feel free to read the docs for them and get everything setup yourself; primarily downloading Mimikatz and Rubeus for the DCSync and Kerberoast tests, which you can do through the [-GetPrereqs](https://github.com/redcanaryco/invoke-atomicredteam/wiki/Check-or-Get-Prerequisites-for-Atomic-Tests#get-prerequisites) option when running your tests.
 
 * [Atomic Red Team Test - DCSync](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/T1003.006/T1003.006.md#atomic-test-1---dcsync-active-directory)
 
